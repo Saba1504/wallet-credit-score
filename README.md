@@ -1,58 +1,80 @@
 # wallet-credit-score
-# DeFi Wallet Credit Scoring Using Aave V2 Data
+# 🧠 Wallet Credit Scoring using Aave V2 Transaction Data
 
-This project analyzes DeFi wallet transactions using Aave V2 protocol data and generates a **credit score between 0 and 1000** for each wallet, based on behavior and usage metrics.
-
----
-
-## 🔍 Problem Statement
-
-DeFi lacks traditional credit systems. This project attempts to score wallets based on their lending/borrowing behavior, activity levels, and diversity in usage using a behavioral credit scoring model.
-
----
-
-## 📊 Methodology
-
-1. **Data Ingestion**:
-   - JSON file with 100,000 wallet transactions.
-   - Each transaction includes action type, amount, asset, price in USD, etc.
-
-2. **Feature Engineering**:
-   - For each wallet:
-     - Total transactions
-     - Unique assets used
-     - Total and average USD volume
-     - Actions count: deposit, borrow, repay, etc.
-
-3. **Derived Metrics**:
-   - Deposit ratio = deposit / total transactions
-   - Activity score (weighted metric of usage)
-   - Min-Max scaling of activity score → Final Credit Score (0–1000)
-
-4. **Scoring**:
-   - Wallets are scored and categorized into 5 buckets:
-     - 0–200: Very Low
-     - 200–400: Low
-     - 400–600: Medium
-     - 600–800: High
-     - 800–1000: Very High
-
-5. **Visualization**:
-   - Credit score distribution
-   - Behavioral insights per group
+## 📁 Dataset
+The dataset contains ~100,000 user wallet transactions from Aave V2.  
+Each entry in the JSON file includes:
+- `userWallet`: the wallet address
+- `network`: network used
+- `protocol`: protocol used (Aave V2)
+- `action`: deposit, borrow, repay, withdraw, etc.
+- `actionData`: includes:
+  - `amount`
+  - `assetSymbol`
+  - `assetPriceUSD`
+- `timestamp`: Unix timestamp
 
 ---
 
-## ⚙️ Project Structure
+## ⚙️ Method & Architecture
 
-- `src/feature_engineering.py`: Feature extraction and scoring logic
-- `src/visualize.py`: Score plotting and behavior summary
-- `analysis.md`: Insight into behavior of wallets per score group
-- `wallet_credit_scores.csv`: Final output with scores and features
+### 1. **Loading & Preprocessing**
+- Extracted the JSON from the ZIP file.
+- Grouped transactions by wallet.
+- Cleaned and converted relevant data (e.g., timestamp to datetime).
+- Filtered essential fields for scoring.
+
+### 2. **Feature Engineering**
+Extracted these features per wallet:
+- Total number of transactions
+- Total amount deposited / borrowed / repaid / withdrawn
+- Average USD value per transaction
+- Diversity of assets used
+- First & last transaction date
+
+### 3. **Scoring Logic**
+Each wallet received a score from **0 to 1000**, based on:
+- Volume and frequency of positive behaviors (e.g., repaying loans, consistent deposits)
+- Penalty for risky behavior (e.g., large withdrawals with no repayments)
+
+Final score formula (simplified):
+
 
 ---
 
-## 📦 Requirements
+## 🧪 Output
 
-```bash
-pip install pandas matplotlib seaborn scikit-learn
+After scoring:
+- Each wallet was saved in a CSV file: `wallet_scores.csv`
+- Score distribution histogram was generated.
+- Analysis done on high vs. low scoring wallets.
+
+---
+
+## 📊 Score Distribution
+See `analysis.md` for graphs and insights.
+
+---
+
+## ▶️ How to Run
+1. Upload the `user-wallet-transactions.json.zip` file.
+2. Run the notebook or Python script.
+3. Output CSV and graphs will be generated.
+
+---
+
+## 🧰 Requirements
+- Python 3.8+
+- `pandas`
+- `matplotlib`
+- `numpy`
+- `json`
+- `zipfile`
+- `datetime`
+
+---
+
+## 👨‍💻 Author
+Saba Khan  
+Project for Wallet Behavior Scoring using Aave V2 Data.
+
