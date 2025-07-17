@@ -1,52 +1,58 @@
 # wallet-credit-score
-# 🧠 DeFi Wallet Credit Scoring using Aave V2 Data
+# DeFi Wallet Credit Scoring Using Aave V2 Data
 
-This project analyzes 100,000+ user wallet transactions on Aave V2 and computes a **credit score from 0 to 1000** for each wallet. The goal is to evaluate user behavior and creditworthiness based on DeFi activity.
-
----
-
-## 📊 Problem Statement
-
-DeFi protocols lack traditional credit scores. We aim to assign a wallet-based score using past transaction behaviors such as deposits, borrowings, repayments, and frequency of interaction.
+This project analyzes DeFi wallet transactions using Aave V2 protocol data and generates a **credit score between 0 and 1000** for each wallet, based on behavior and usage metrics.
 
 ---
 
-## 🧱 Architecture
+## 🔍 Problem Statement
 
-1. **Input**: A JSON file containing 100,000+ transactions with fields like:
-   - `userWallet`, `network`, `protocol`, `action`, `actionData`, `timestamp`
-
-2. **Processing Steps**:
-   - Extract data from the ZIP file
-   - Parse the JSON
-   - Group transactions by `userWallet`
-   - Compute features per wallet:
-     - Total deposits
-     - Total borrowings
-     - Number of interactions
-     - Average transaction size
-     - Asset diversity
-   - Normalize features and compute final score
-
-3. **Output**:
-   - A DataFrame containing wallet address and their credit score
-   - Score distribution analysis and visualization
+DeFi lacks traditional credit systems. This project attempts to score wallets based on their lending/borrowing behavior, activity levels, and diversity in usage using a behavioral credit scoring model.
 
 ---
 
-## ⚙️ Technologies Used
+## 📊 Methodology
 
-- Python
-- Pandas
-- NumPy
-- Matplotlib / Seaborn
-- Jupyter Notebook
+1. **Data Ingestion**:
+   - JSON file with 100,000 wallet transactions.
+   - Each transaction includes action type, amount, asset, price in USD, etc.
+
+2. **Feature Engineering**:
+   - For each wallet:
+     - Total transactions
+     - Unique assets used
+     - Total and average USD volume
+     - Actions count: deposit, borrow, repay, etc.
+
+3. **Derived Metrics**:
+   - Deposit ratio = deposit / total transactions
+   - Activity score (weighted metric of usage)
+   - Min-Max scaling of activity score → Final Credit Score (0–1000)
+
+4. **Scoring**:
+   - Wallets are scored and categorized into 5 buckets:
+     - 0–200: Very Low
+     - 200–400: Low
+     - 400–600: Medium
+     - 600–800: High
+     - 800–1000: Very High
+
+5. **Visualization**:
+   - Credit score distribution
+   - Behavioral insights per group
 
 ---
 
-## 🚀 How to Run
+## ⚙️ Project Structure
 
-1. Clone the repo
+- `src/feature_engineering.py`: Feature extraction and scoring logic
+- `src/visualize.py`: Score plotting and behavior summary
+- `analysis.md`: Insight into behavior of wallets per score group
+- `wallet_credit_scores.csv`: Final output with scores and features
+
+---
+
+## 📦 Requirements
+
 ```bash
-git clone https://github.com/your-username/wallet-credit-score.git
-cd wallet-credit-score
+pip install pandas matplotlib seaborn scikit-learn
